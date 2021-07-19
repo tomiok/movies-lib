@@ -2,9 +2,9 @@ package movies_lib
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/buger/jsonparser"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 )
@@ -20,7 +20,7 @@ type openAPIDB struct {
 
 func newOA() *openAPIDB {
 	client := http.Client{
-		Timeout: time.Millisecond * 900,
+		Timeout: time.Millisecond * 3000,
 	}
 
 	return &openAPIDB{
@@ -54,9 +54,19 @@ func (o *openAPIDB) Search(title string) (*MovieResponse, error) {
 	return result, nil
 }
 
-const baseURL = "http://www.omdbapi.com/?apikey=%s&t=%s"
+const baseURL = "https://www.omdbapi.com/"
 
 func buildRequest(key, title string) http.Request {
-	host := fmt.Sprintf(baseURL, key, title)
-	return http.Request{Host: host}
+	u, _ := url.Parse(baseURL)
+	req :=  http.Request{
+		URL: u,
+		Method: http.MethodGet,
+	}
+
+	q := req.URL.Query()
+
+	q.Add("apikey", key)
+	q.Add("t", title)
+	req.URL.RawQuery = q.Encode()
+	return req
 }
