@@ -13,7 +13,7 @@ import (
 var _ Search = (*openAPIDB)(nil)
 
 type Search interface {
-	ByTitle(title string) ([]MovieResponse, error)
+	ByTitle(title string) ([]OpenAPIResponse, error)
 }
 
 type openAPIDB struct {
@@ -32,7 +32,7 @@ func newOA() *openAPIDB {
 	}
 }
 
-func (o *openAPIDB)ByTitle(title string) ([]MovieResponse, error) {
+func (o *openAPIDB)ByTitle(title string) ([]OpenAPIResponse, error) {
 	req := buildRequest(o.key, title)
 
 	res, err := o.client.Do(&req)
@@ -46,15 +46,18 @@ func (o *openAPIDB)ByTitle(title string) ([]MovieResponse, error) {
 	buf := new(bytes.Buffer)
 	_, _ = buf.ReadFrom(body)
 
-	var result []MovieResponse
+	var result []OpenAPIResponse
 	fmt.Println(string(buf.Bytes()))
-	jsonparser.ArrayEach(buf.Bytes(), func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-		var movie MovieResponse
+
+	v, _, _, err := jsonparser.Get(buf.Bytes(), "Search")
+
+	_, err = jsonparser.ArrayEach(v, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+		var movie OpenAPIResponse
 		movie.Title, err = jsonparser.GetString(value, "Title")
 		movie.Year, err = jsonparser.GetString(value, "Year")
-		movie.Genre, err = jsonparser.GetString(value, "Genre")
-		movie.Director, err = jsonparser.GetString(value, "Director")
-		movie.Writer, err = jsonparser.GetString(value, "Writer")
+		movie.IMDB, err = jsonparser.GetString(value, "imdbID")
+		movie.Poster, err = jsonparser.GetString(value, "Poster")
+
 	})
 
 	return result, nil
