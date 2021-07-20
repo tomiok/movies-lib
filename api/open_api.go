@@ -1,8 +1,7 @@
-package movies_lib
+package api
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/buger/jsonparser"
 	"net/http"
 	"net/url"
@@ -13,7 +12,8 @@ import (
 var _ Search = (*openAPIDB)(nil)
 
 type Search interface {
-	ByTitle(title string) ([]OpenAPIResponse, error)
+	ByQueryTitle(title string) ([]OpenAPIResponse, error)
+	ByTitle(title string) (*OpenAPIMovie, error)
 }
 
 type openAPIDB struct {
@@ -32,8 +32,8 @@ func newOA() *openAPIDB {
 	}
 }
 
-func (o *openAPIDB)ByTitle(title string) ([]OpenAPIResponse, error) {
-	req := buildRequest(o.key, title)
+func (o *openAPIDB) ByQueryTitle(search string) ([]OpenAPIResponse, error) {
+	req := buildRequest(o.key, search, "s")
 
 	res, err := o.client.Do(&req)
 
@@ -47,7 +47,6 @@ func (o *openAPIDB)ByTitle(title string) ([]OpenAPIResponse, error) {
 	_, _ = buf.ReadFrom(body)
 
 	var result []OpenAPIResponse
-	fmt.Println(string(buf.Bytes()))
 
 	v, _, _, err := jsonparser.Get(buf.Bytes(), "Search")
 
@@ -57,15 +56,39 @@ func (o *openAPIDB)ByTitle(title string) ([]OpenAPIResponse, error) {
 		movie.Year, err = jsonparser.GetString(value, "Year")
 		movie.IMDB, err = jsonparser.GetString(value, "imdbID")
 		movie.Poster, err = jsonparser.GetString(value, "Poster")
-
+		result = append(result, movie)
 	})
 
 	return result, nil
 }
 
+func (o *openAPIDB) ByTitle(title string) (*OpenAPIMovie, error) {
+	req := buildRequest(o.key, title, "t")
+
+	res, err := o.client.Do(&req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	body := res.Body
+	defer body.Close()
+	buf := new(bytes.Buffer)
+	_, _ = buf.ReadFrom(body)
+	value := buf.Bytes()
+	var movie OpenAPIMovie
+	movie.Title, _ = jsonparser.GetString(value, "Title")
+	movie.Year, _ = jsonparser.GetString(value, "Year")
+	movie.Genre, _ = jsonparser.GetString(value, "Genre")
+	movie.Director, _ = jsonparser.GetString(value, "Director")
+	movie.Writer, _ = jsonparser.GetString(value, "Writer")
+
+	return &movie, nil
+}
+
 const baseURL = "https://www.omdbapi.com/"
 
-func buildRequest(key, title string) http.Request {
+func buildRequest(key, title, query string) http.Request {
 	u, _ := url.Parse(baseURL)
 	req := http.Request{
 		URL:    u,
@@ -75,7 +98,7 @@ func buildRequest(key, title string) http.Request {
 	q := req.URL.Query()
 
 	q.Add("apikey", key)
-	q.Add("s", title)
+	q.Add(query, title)
 	req.URL.RawQuery = q.Encode()
 	return req
 }
