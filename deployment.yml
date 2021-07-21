@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-lib-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: movies-lib-app
+  template:
+    metadata:
+      labels:
+        name: movies-lib-app
+    spec:
+      containers:
+        - name: application
+          image: tomaslingotti/movies-lib:0.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+        env:
+          - name: API_KEY
+            value: "4ecb0111"

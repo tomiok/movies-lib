@@ -54,5 +54,7 @@ COPY --from=builder /go/bin/movies-lib /go/bin/movies-lib
 # Use an unprivileged user.
 USER appuser:appuser
 
+EXPOSE 5000
+
 # Run the binary.
 ENTRYPOINT ["/go/bin/movies-lib"]
