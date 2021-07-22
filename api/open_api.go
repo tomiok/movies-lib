@@ -5,7 +5,6 @@ import (
 	"github.com/buger/jsonparser"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 )
 
@@ -28,12 +27,11 @@ func newOA() *openAPIDB {
 
 	return &openAPIDB{
 		client: client,
-		key:    os.Getenv("API_KEY"),
 	}
 }
 
 func (o *openAPIDB) ByQueryTitle(search string) ([]OpenAPIResponse, error) {
-	req := buildRequest(o.key, search, "s")
+	req := buildRequest(search, "s")
 
 	res, err := o.client.Do(&req)
 
@@ -63,7 +61,7 @@ func (o *openAPIDB) ByQueryTitle(search string) ([]OpenAPIResponse, error) {
 }
 
 func (o *openAPIDB) ByTitle(title string) (*OpenAPIMovie, error) {
-	req := buildRequest(o.key, title, "t")
+	req := buildRequest(title, "t")
 
 	res, err := o.client.Do(&req)
 
@@ -88,7 +86,7 @@ func (o *openAPIDB) ByTitle(title string) (*OpenAPIMovie, error) {
 
 const baseURL = "https://www.omdbapi.com/"
 
-func buildRequest(key, title, query string) http.Request {
+func buildRequest(title, query string) http.Request {
 	u, _ := url.Parse(baseURL)
 	req := http.Request{
 		URL:    u,
@@ -97,7 +95,7 @@ func buildRequest(key, title, query string) http.Request {
 
 	q := req.URL.Query()
 
-	q.Add("apikey", key)
+	q.Add("apikey", "4ecb0111")
 	q.Add(query, title)
 	req.URL.RawQuery = q.Encode()
 	return req

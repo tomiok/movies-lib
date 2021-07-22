@@ -1,24 +1,23 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: movies-lib-app
+  name: movies-lib
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      name: movies-lib-app
+      app: movies-lib
   template:
     metadata:
       labels:
-        name: movies-lib-app
+        app: movies-lib
     spec:
       containers:
-        - name: application
-          image: tomaslingotti/movies-lib:0.0.2
-          imagePullPolicy: IfNotPresent
+        - name: go-movies-lib
+          image: tomaslingotti/movies-lib:0.0.3
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 5000
-        env:
-          - name: API_KEY
-            value: "4ecb0111"
