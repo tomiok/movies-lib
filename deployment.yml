@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: movies-lib
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: movies-lib
+      name: movies-lib
   template:
     metadata:
       labels:
-        app: movies-lib
+        name: movies-lib
     spec:
       containers:
         - name: go-movies-lib
