@@ -5,6 +5,7 @@ import (
 	"github.com/buger/jsonparser"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 )
 
@@ -95,7 +96,7 @@ func buildRequest(title, query string) http.Request {
 
 	q := req.URL.Query()
 
-	q.Add("apikey", "4ecb0111")
+	q.Add("apikey", os.Getenv("OMDB_API"))
 	q.Add(query, title)
 	req.URL.RawQuery = q.Encode()
 	return req
