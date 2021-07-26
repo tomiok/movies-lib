@@ -3,10 +3,14 @@ package main
 import (
 	"github.com/tomiok/movies-lib/api"
 	"log"
+	"os"
 )
 
 func main() {
 	app := api.Start()
-
-	log.Fatal(app.Listen(":5000"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+	}
+	log.Fatal(app.Listen(":" + port))
 }
