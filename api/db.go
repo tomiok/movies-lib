@@ -3,6 +3,7 @@ package api
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
 )
 
 var SDB *gorm.DB
@@ -15,7 +16,7 @@ func Get() *gorm.DB {
 }
 
 func get() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("movies.db"), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
@@ -29,6 +30,6 @@ func Migrate() {
 	err := db.AutoMigrate(&Review{})
 
 	if err != nil {
-		//todo print log
+		log.Println(err.Error())
 	}
 }

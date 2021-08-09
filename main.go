@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	api.Migrate()
 	app := api.Start()
 	port := os.Getenv("PORT")
 	if port == "" {
