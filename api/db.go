@@ -27,7 +27,7 @@ func get() *gorm.DB {
 func Migrate() {
 	db := Get()
 
-	err := db.AutoMigrate(&Review{})
+	err := db.AutoMigrate(&Review{}, &Movie{})
 
 	if err != nil {
 		log.Println(err.Error())
