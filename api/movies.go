@@ -11,12 +11,13 @@ type MovieGateway interface {
 
 type Movie struct {
 	gorm.Model `json:"gorm_model"`
-	Title      string `json:"title" json:"title,omitempty"`
-	Year       string `json:"year" json:"year,omitempty"`
-	Genre      string `json:"genre" json:"genre,omitempty"`
-	Director   string `json:"director" json:"director,omitempty"`
-	Writer     string `json:"writer" json:"writer,omitempty"`
-	ImdbID     string `json:"imdb_id" json:"imdb_id,omitempty" gorm:"uniqueIndex"`
+	Title      string `json:"title"`
+	Year       string `json:"year"`
+	Genre      string `json:"genre"`
+	Director   string `json:"director"`
+	Writer     string `json:"writer"`
+	ImdbID     string `json:"imdb_id" gorm:"uniqueIndex"`
+	Reviews []Review  `json:"reviews"`
 }
 
 type MovieStorage struct{}

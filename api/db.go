@@ -1,9 +1,9 @@
 package api
 
 import (
+	"go.uber.org/zap"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
 var SDB *gorm.DB
@@ -30,6 +30,8 @@ func Migrate() {
 	err := db.AutoMigrate(&Review{}, &Movie{})
 
 	if err != nil {
-		log.Println(err.Error())
+		zap.L().Error("cannot perform migration", zap.Error(err))
+		return
 	}
+	zap.L().Info("migration done")
 }

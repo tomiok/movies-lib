@@ -10,7 +10,7 @@ type ReviewGateway interface {
 type Review struct {
 	gorm.Model
 	Comment string `gorm:"column:comment"`
-	Movie   Movie
+	MovieID uint
 }
 
 type MoviesReview struct {
@@ -28,6 +28,6 @@ func (m *MoviesReview) Add(comment string, imdbID string) error {
 
 	return db.Create(Review{
 		Comment: comment,
-		Movie:   movie,
+		MovieID: movie.ID,
 	}).Error
 }
