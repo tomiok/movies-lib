@@ -6,13 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var SDB *gorm.DB
+var MoviesDB *gorm.DB
 
 func Get() *gorm.DB {
-	if SDB == nil {
-		SDB = get()
+	if MoviesDB == nil {
+		MoviesDB = get()
 	}
-	return SDB
+	return MoviesDB
 }
 
 func get() *gorm.DB {
