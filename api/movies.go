@@ -30,7 +30,7 @@ func (m *MovieStorage) Add(movie *Movie) error {
 }
 
 func (m *MovieStorage) FindByTitle(title string) ([]Movie, error) {
-	panic("implement me")
+	panic("implement me with some full text")
 }
 
 func (m *MovieStorage) FindByID(id uint) (Movie, error) {
@@ -45,5 +45,5 @@ func (m *MovieStorage) FindByID(id uint) (Movie, error) {
 }
 
 func (m *MovieStorage) GetReviews(id uint) []Review {
-	return nil	
+	return nil
 }
