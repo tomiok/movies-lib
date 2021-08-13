@@ -2,7 +2,6 @@ package movies
 
 import (
 	"errors"
-	"github.com/tomiok/movies-lib/reviews"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -12,7 +11,7 @@ type MovieGateway interface {
 	FindByTitle(title string) ([]Movie, error)
 	FindByID(id uint) (Movie, error)
 	FindByIMDB(s string) (Movie, error)
-	GetReviews(id uint) []reviews.Review
+	GetReviews(id uint) []Review
 }
 
 type Movie struct {
@@ -22,8 +21,8 @@ type Movie struct {
 	Genre    string   `json:"genre"`
 	Director string   `json:"director"`
 	Writer   string   `json:"writer"`
-	ImdbID   string           `json:"imdb_id" gorm:"uniqueIndex"`
-	Reviews  []reviews.Review `json:"reviews"`
+	ImdbID   string   `json:"imdb_id" gorm:"uniqueIndex"`
+	Reviews  []Review `json:"reviews"`
 }
 
 type MovieStorage struct {
@@ -54,6 +53,6 @@ func (m *MovieStorage) FindByID(id uint) (Movie, error) {
 	return movie, nil
 }
 
-func (m *MovieStorage) GetReviews(id uint) []reviews.Review {
+func (m *MovieStorage) GetReviews(id uint) []Review {
 	return nil
 }

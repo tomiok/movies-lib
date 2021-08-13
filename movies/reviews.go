@@ -1,7 +1,6 @@
-package reviews
+package movies
 
 import (
-	"github.com/tomiok/movies-lib/movies"
 	"gorm.io/gorm"
 )
 
@@ -16,12 +15,12 @@ type Review struct {
 	MovieID uint
 }
 
-type MoviesReview struct {
-	MovieGtw movies.MovieGateway
+type ReviewStorage struct {
+	MovieGtw MovieGateway
 	db       *gorm.DB
 }
 
-func (m *MoviesReview) Add(comment string, imdbID string) error {
+func (m *ReviewStorage) Add(comment string, imdbID string) error {
 	movie, err := m.MovieGtw.FindByIMDB(imdbID)
 
 	if err != nil {
