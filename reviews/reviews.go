@@ -1,6 +1,9 @@
-package api
+package reviews
 
-import "gorm.io/gorm"
+import (
+	"github.com/tomiok/movies-lib/movies"
+	"gorm.io/gorm"
+)
 
 type ReviewGateway interface {
 	Add(comment, movie string) error
@@ -14,7 +17,7 @@ type Review struct {
 }
 
 type MoviesReview struct {
-	MovieGtw MovieGateway
+	MovieGtw movies.MovieGateway
 	db       *gorm.DB
 }
 

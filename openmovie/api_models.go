@@ -1,4 +1,4 @@
-package api
+package openmovie
 
 // OpenAPIResponse is the response mapped from the movie database API. When search with 's' param.
 type OpenAPIResponse struct {

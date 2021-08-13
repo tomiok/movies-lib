@@ -1,4 +1,4 @@
-package api
+package openmovie
 
 import (
 	"bytes"
@@ -21,7 +21,7 @@ type openAPIDB struct {
 	key    string
 }
 
-func newOA() *openAPIDB {
+func NewOA() *openAPIDB {
 	client := http.Client{
 		Timeout: time.Millisecond * 3000,
 	}

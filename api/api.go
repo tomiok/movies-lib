@@ -1,11 +1,14 @@
 package api
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/tomiok/movies-lib/openmovie"
+)
 
 func Start() *fiber.App{
 	app := fiber.New()
-	s := Service{
-		Search: newOA(),
+	s := openmovie.Service{
+		Search: openmovie.NewOA(),
 	}
 
 	app.Get("/", s.HealthCheckHandler)

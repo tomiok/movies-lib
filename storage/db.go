@@ -1,6 +1,8 @@
-package api
+package storage
 
 import (
+	"github.com/tomiok/movies-lib/movies"
+	"github.com/tomiok/movies-lib/reviews"
 	"go.uber.org/zap"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -27,7 +29,7 @@ func get() *gorm.DB {
 func Migrate() {
 	db := Get()
 
-	err := db.AutoMigrate(&Review{}, &Movie{})
+	err := db.AutoMigrate(&reviews.Review{}, &movies.Movie{})
 
 	if err != nil {
 		zap.L().Error("cannot perform migration", zap.Error(err))
