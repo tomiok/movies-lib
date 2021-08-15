@@ -11,7 +11,7 @@ import (
 
 func main() {
 	config.InitLogs()
-	storage.Migrate(movies.Movie{}, movies.Review{})
+	storage.Migrate(false, movies.Movie{}, movies.Review{})
 	app := api.Start()
 	port := os.Getenv("PORT")
 	if port == "" {

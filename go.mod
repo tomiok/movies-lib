@@ -3,6 +3,7 @@ module github.com/tomiok/movies-lib
 go 1.15
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/buger/jsonparser v1.1.1
 	github.com/gofiber/fiber/v2 v2.15.0
 	go.uber.org/zap v1.19.0

@@ -8,25 +8,37 @@ import (
 
 var MoviesDB *gorm.DB
 
-func Get() *gorm.DB {
+func Get(isTesting bool) *gorm.DB {
 	if MoviesDB == nil {
-		MoviesDB = get()
+		MoviesDB = get(isTesting)
 	}
 	return MoviesDB
 }
 
-func get() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("movies.db"), &gorm.Config{})
+func get(isTesting bool) *gorm.DB {
+	var dsn string
 
+	if isTesting {
+		dsn = "movies-testing.db"
+	} else {
+		dsn = "movies.db"
+	}
+
+	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 	return db
 }
 
-func Migrate(dest ...interface{}) {
-	db := Get()
-
+func Migrate(isTesting bool, dest ...interface{}) {
+	db := Get(isTesting)
+	if isTesting {
+		err := db.Migrator().DropTable(dest...)
+		if err != nil {
+			zap.L().Warn("cannot drop tables", zap.Error(err))
+		}
+	}
 	err := db.AutoMigrate(dest...)
 
 	if err != nil {
